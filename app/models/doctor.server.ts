@@ -2,6 +2,8 @@ import type { Password, Doctor } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { prisma } from "~/db.server";
 
+export { Doctor };
+
 export async function getUserById(id: Doctor["id"]) {
   return prisma.doctor.findUnique({ where: { id } });
 }

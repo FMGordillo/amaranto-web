@@ -1,14 +1,13 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
-
 import { requireUserId } from "~/session.server";
 import { useUser } from "~/utils";
-import { getNoteListItems } from "~/models/note.server";
+import { getAppointmentsByDoctor } from "~/models/appointment.server";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserId(request);
-  const noteListItems = await getNoteListItems({ userId });
+  const noteListItems = await getAppointmentsByDoctor({ doctorId: userId });
   return json({ noteListItems });
 }
 
@@ -53,7 +52,8 @@ export default function NotesPage() {
                     }
                     to={note.id}
                   >
-                    📝 {note.title}
+                    TEST
+                    {/* 📝 {note.title} */}
                   </NavLink>
                 </li>
               ))}

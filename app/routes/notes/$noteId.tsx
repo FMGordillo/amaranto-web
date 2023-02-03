@@ -1,16 +1,25 @@
 import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useCatch, useLoaderData } from "@remix-run/react";
+import { Form, useCatch } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
-import { deleteNote, getNote } from "~/models/note.server";
+import { getAppointment } from "~/models/appointment.server";
 import { requireUserId } from "~/session.server";
 
 export async function loader({ request, params }: LoaderArgs) {
-  const userId = await requireUserId(request);
+  const doctorId = await requireUserId(request);
   invariant(params.noteId, "noteId not found");
 
-  const note = await getNote({ userId, id: params.noteId });
+  if (!params.id) {
+    throw new Response("No noteid", { status: 400 });
+  }
+
+  const note = await getAppointment({
+    doctorId,
+    id: params.id,
+    // TODO: Fix this
+    patientId: params.id,
+  });
   if (!note) {
     throw new Response("Not Found", { status: 404 });
   }
@@ -18,21 +27,21 @@ export async function loader({ request, params }: LoaderArgs) {
 }
 
 export async function action({ request, params }: ActionArgs) {
-  const userId = await requireUserId(request);
-  invariant(params.noteId, "noteId not found");
+  // const userId = await requireUserId(request);
+  // invariant(params.noteId, "noteId not found");
 
-  await deleteNote({ userId, id: params.noteId });
+  // await deleteNote({ userId, id: params.noteId });
 
   return redirect("/notes");
 }
 
 export default function NoteDetailsPage() {
-  const data = useLoaderData<typeof loader>();
+  // const data = useLoaderData<typeof loader>();
 
   return (
     <div>
-      <h3 className="text-2xl font-bold">{data.note.title}</h3>
-      <p className="py-6">{data.note.body}</p>
+      {/* <h3 className="text-2xl font-bold">{data.note}</h3> */}
+      {/* <p className="py-6">{data.note}</p> */}
       <hr className="my-4" />
       <Form method="post">
         <button

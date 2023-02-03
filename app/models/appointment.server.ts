@@ -15,13 +15,17 @@ export function getAppointment({
   });
 }
 
-// export function getNoteListItems({ userId }: { userId: User["id"] }) {
-//   return prisma.appointment.findMany({
-//     where: { userId },
-//     select: { id: true, title: true },
-//     orderBy: { updatedAt: "desc" },
-//   });
-// }
+export function getAppointmentsByDoctor({
+  doctorId,
+}: {
+  doctorId: Doctor["id"];
+}) {
+  return prisma.appointment.findMany({
+    where: { doctorId },
+    select: { id: true },
+    // orderBy: { updatedAt: "desc" },
+  });
+}
 
 export function createAppointment({
   text,
