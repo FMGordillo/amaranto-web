@@ -29,7 +29,7 @@ async function seed() {
 
   const myPatient = await prisma.patient.upsert({
     where: {
-      id: myDoctor.patients[0]?.id,
+      id: myDoctor.patients[0]?.id || undefined,
     },
     update: {},
     create: {
@@ -46,7 +46,7 @@ async function seed() {
   await prisma.appointment
     .upsert({
       where: {
-        id: myDoctor.appointments[0]?.id,
+        id: myDoctor.appointments[0]?.id || undefined,
       },
       update: {},
       create: {
